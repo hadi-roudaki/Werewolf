@@ -1,0 +1,207 @@
+<head>
+  <meta charset="utf-8">
+  <title>Werewolf | Roudaki</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <link href='http://fonts.googleapis.com/css?family=Raleway:400,300,600' rel='stylesheet' type='text/css'>
+  <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300,600&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="css/normalize.css" type="text/css">
+  <link rel="stylesheet" href="css/skeleton.css" type="text/css">
+  <link rel="stylesheet" href="css/styles.css" type="text/css">
+</head>
+
+<body></body>
+
+<template name="main">
+  <div dir="{{ textDirection }}" class="container dir-{{textDirection}} lang-{{ language }}">
+    <div class="main-content">
+      {{> Template.dynamic template=whichView}}
+
+      <hr>
+
+      {{> footer }}
+    </div>
+  </div>
+</template>
+
+<template name="startMenu">
+  <div class="main-menu">
+    <h4>Werewolf</h4>
+
+    <hr>
+
+    <div class="button-container">
+      <button id="btn-new-game">{{_ "ui.new game" }}</button>
+      <button id="btn-join-game">{{_ "ui.join game" }}</button>
+    </div>
+  </div>
+</template>
+
+<template name="lobby">
+  <h4>{{_ "ui.waiting for players" }}</h4>
+
+  <div class="access-code">
+    {{_ "ui.access code" }}:
+    <span>{{ game.accessCode }}</span>
+  </div>
+  <script src="main.js" type="text/javascript"></script>
+
+  <div class="access-buttons">
+    <a class="access-button btn-toggle-qrcode" href="javascript:void(0);">
+      <i class="fa fa-qrcode"></i>
+    </a>
+
+    <span class="access-button-separator"></span>
+
+    <a class="access-button btn-send-access-code-email" href='mailto:?subject={{_ "ui.join my spyfall game" }}&body={{ accessLink }}'>
+      <i class="fa fa-envelope-o"></i>
+    </a>
+  </div>
+
+  <div class="qrcode-container" style="display: none;">
+    <div id="qrcode" class="qrcode"></div>
+
+    <div id="access-link" class="access-link">
+      <a href="{{ accessLink }}">{{ accessLink }}</a>
+    </div>
+  </div>
+
+  <hr>
+
+  <ol class="lobby-player-list">
+    {{#each players }}
+      <li>
+        {{ name }}
+
+        {{#if isCurrent }}
+          <a href="#" class="btn-edit-player" data-player-id="{{ _id }}">
+            <i class="fa fa-pencil"></i>
+          </a>
+        {{else}}
+          <a href="#" class="btn-remove-player" data-player-id="{{ _id }}">
+            <i class="fa fa-close"></i>
+          </a>
+        {{/if}}
+      </li>
+    {{/each}}
+  </ol>
+
+  <hr>
+
+  <div class="button-container">
+    <button class="btn-start">{{_ "ui.start game" }}</button>
+    <button class="btn-leave">{{_ "ui.leave game" }}</button>
+  </div>
+</template>
+
+<template name="gameView">
+  <h4><a href="#" class="game-countdown {{#if gameFinished }}finished{{/if}} {{#if game.paused }}paused{{/if}}">{{{ timeRemaining }}}</a></h4>
+
+  <div class="status-container">
+    <button class="btn-toggle-status">{{_ "ui.show hide" }}</button>
+
+    <div class="status-container-content">
+      {{#if player.isSpy }}
+        <div class="player-status player-status-spy">{{_ "you are the WereWolf" }}</div>
+      {{else}}
+        <div class="current-role">
+          <div class="current-role-header">
+            {{_ "ui.your role" }}:
+          </div>
+          <div class="current-role-name">
+            {{_ player.role }}
+          </div>
+        </div>
+      {{/if}}
+    </div>
+  </div>
+
+  <h5>{{_ "ui.players" }}</h5>
+  <ul class="ingame-player-list">
+    {{#each players }}
+      <li>
+        <div class="player-name">
+          {{ name }}
+          {{#if isFirstPlayer}}
+            <div class="first-player-indicator">{{{_ "ui.first" }}}</div>
+          {{/if}}
+        </div>
+      </li>
+    {{/each}}
+  </ul>
+
+  <div class="u-cf"></div>
+  
+  <h5>{{_ "ui.location reference" }}</h5>
+  <ul class="location-list">
+    {{#each locations }}
+      <li>
+        <div class="location-name">{{_ roles }}</div>
+      </li>
+    {{/each}}
+  </ul>
+
+  <hr>
+
+  <div class="button-container">
+    <button class="btn-end">{{_ "ui.end game" }}</button>
+    <button class="btn-leave">{{_ "ui.leave game" }}</button>
+  </div>
+</template>
+
+<template name="createGame">
+  <h4>{{_ "ui.welcome to spyfall" }}</h4>
+
+  <hr>
+
+  <form id="create-game">  
+    <div class="">
+      <input type="text" id="player-name" name="playerName" placeholder='{{_ "ui.enter your name" }}'>     
+      <hr>
+      <div>
+        Lobby Size: <input type="number" id="lobbyInt" name="quantity" min="1">
+      </div>
+      <h5>Roles: </h5>
+      <div class="checkbox row">
+        {{#each characters }}
+         <div class="col-xs-9">
+        <label>
+          <input type="checkbox" id="blankCheckbox" value="option1" aria-label="...">{{_ name }}          
+         <span class="glyphicon glyphicon-plus"></span> <input id= '{{_ name }}' type="number" name="quantity" min="0"  >
+        </label>
+         </div>
+        {{/each}}
+
+      </div>
+
+      <div class="button-container">
+        <input type="submit" value='{{_ "ui.create game" }}'>
+        <button class="btn-back">{{_ "ui.back" }}</button>
+      </div>
+    </div>
+  </form>
+</template>
+
+<template name="joinGame">
+  <h4>{{_ "ui.welcome to spyfall" }}</h4>
+
+  <hr>
+
+  <form id="join-game">  
+    <div>
+      <input autocorrect="off" autocapitalize="off" type="text" id="access-code" name="accessCode" placeholder='{{_ "ui.enter an access code" }}'>
+      <input type="text" id="player-name" name="playerName" placeholder='{{_ "ui.enter your name" }}'>
+
+      {{> flashMessages}}
+
+      <div class="button-container">
+        <input type="submit" value='{{_ "ui.join" }}'>
+        <button class="btn-back">{{_ "ui.back" }}</button>
+      </div>
+    </div>
+  </form>
+</template>
+
+<template name="footer">
+    <a  href="www.roudaki.org">Roudaki.org</a>
+</template>
