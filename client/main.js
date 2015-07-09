@@ -94,14 +94,6 @@ function getLanguageList() {
   return languageList;
 }
 
-function getRole(a) {
-    for (index = 0; index < characters.length; ++index) {
-        if (characters[index].name === a) {
-            console.log(characters[index]);
-        }
-    }
-}
-
 function getCurrentGame(){
   var gameID = Session.get("gameID");
 
@@ -199,7 +191,7 @@ function assignRoles(players, location){
       if (role === undefined){
         role = default_role;
       }
-      getRole(role);
+
       Players.update(player._id, {$set: {role: role}});
     }
   });
