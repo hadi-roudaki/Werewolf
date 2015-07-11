@@ -1,4 +1,4 @@
-﻿<head>
+<head>
   <meta charset="utf-8">
   <title>Werewolf | Roudaki</title>
 
@@ -122,7 +122,9 @@
       <li>
         <div class="player-name">
           {{ name }}
-            <div class="first-player-indicator"></div>
+          {{#if isFirstPlayer}}
+            <div class="first-player-indicator">{{{_ "ui.first" }}}</div>
+          {{/if}}
         </div>
       </li>
     {{/each}}
@@ -130,7 +132,7 @@
 
   <div class="u-cf"></div>
   
-  <h5>{{_ "Roles In play" }}</h5>
+  <h5>{{_ "ui.location reference" }}</h5>
   <ul class="location-list">
     {{#each locations }}
       <li>

@@ -1,25 +1,31 @@
 var lobbySize = 4;
 var totalCount = 0;
 
-var wereWolfNum = 0;
-var doxyNum = 0;
-var masonicLeaderNum = 0;
-var darkMagicianNum = 0;
-var werehampsterNum = 0;
-var HunterNum = 0;
-var GrannyNum = 0;
-var VillagerNum = 0;
-var WitchNum = 0;
-var SeerNum = 0;
-var CupidNum = 0;
+var roleArray = {
+        'WereWolf': 0,
+        'Doxy' : 0,
+        'MasonicLeader' : 0,       
+        'DarkMagician' : 0,
+        'Werehampster' : 0,
+        'Hunter' : 0,
+        'Granny' : 0,
+        'Villager' : 0,
+        'Witch' : 0,
+        'Seer' : 0,
+        'Cupid' : 0
+ };
+
 
 function roleCount(){
-     totalCount = parseInt(wereWolfNum, 10) , parseInt(doxyNum, 10) ,
-     parseInt(werehampsterNum, 10) ,parseInt(HunterNum, 10)  , parseInt(GrannyNum, 10) ,
-     parseInt(VillagerNum, 10) , parseInt(WitchNum, 10) , parseInt(masonicLeaderNum, 10) ,
-     parseInt(SeerNum, 10) , parseInt(CupidNum, 10), parseInt(darkMagicianNum, 10);
-     var temp = lobbySize - totalCount;
+    var totalCount = 0;
+    for (var item in roleArray) {
+        console.log('im adding  ' + item, ' >>>', roleArray[item]);
+
+        totalCount += parseInt(roleArray[item], 10);
+    }
+    console.log('current total '+totalCount);
 }
+
 
 function isValidLobby(){
     if(temp >= 0){
@@ -94,14 +100,6 @@ function getLanguageList() {
   return languageList;
 }
 
-function getRole(a) {
-    for (index = 0; index < characters.length; ++index) {
-        if (characters[index].name === a) {
-            console.log(characters[index]);
-        }
-    }
-}
-
 function getCurrentGame(){
   var gameID = Session.get("gameID");
 
@@ -145,7 +143,7 @@ function generateNewGame(){
     accessCode: generateAccessCode(),
     state: "waitingForPlayers",
     location: null,
-    lengthInMinutes: 8,
+    lengthInMinutes: 0.1,
     endTime: null,
     paused: false,
     pausedTime: null
@@ -199,7 +197,7 @@ function assignRoles(players, location){
       if (role === undefined){
         role = default_role;
       }
-      getRole(role);
+
       Players.update(player._id, {$set: {role: role}});
     }
   });
@@ -318,46 +316,46 @@ Template.createGame.events({
     'change #lobbyInt' : function(event){
         var number = $(event.target).val();
         if(!isNaN(number) && number){
-            lobbySize = number; 
+            lobbySize = number;
             console.log('WHATS THE LOBBY?'+ lobbySize);
         }
     },
     'change #WereWolf' : function(event){
         var number = $(event.target).val();
         if(!isNaN(number) && number){
-            wereWolfNum = number; 
+            roleArray['WereWolf'] = number; 
             roleCount();
-            console.log(number + 'how many left '+ totalCount);
+            console.log(number + 'how many left ');
         }
     },
     'change #Doxy' : function(event){
         var number = $(event.target).val();
         if(!isNaN(number) && number){
-            doxyNum = number;
+            roleArray['Doxy'] = number;
             roleCount();
-            console.log(number + 'how many left '+ totalCount);
+            console.log(number + 'how many left ');
         }
     },
-    'change #Masonic Leader' : function(event){
+    'change #Masonic_Leader' : function(event){
         var number = $(event.target).val();
         if(!isNaN(number) && number){
-            masonicLeaderNum = number; 
+            roleArray['MasonicLeader'] = number;
             roleCount();
-            console.log(number + 'how many left '+ totalCount);
+            console.log(number + 'how many left ');
         }
     },
-    'change #Dark Magician' : function(event){
+    'change #Dark_Magician' : function(event){
         var number = $(event.target).val();
         if(!isNaN(number) && number){
-            darkMagicianNum = number; 
+            roleArray['DarkMagician'] = number; 
             roleCount();
-            console.log(number + 'how many left '+ totalCount);
+            console.log(number + 'how many left ');
         }
     },
     'change #Werehampster' : function(event){
         var number = $(event.target).val();
         if(!isNaN(number) && number){
-            wereWolfNum = number; 
+            roleArray['Werehampster'] = number;
             roleCount();
             console.log(number + 'how many left '+ totalCount);
         }
@@ -365,7 +363,7 @@ Template.createGame.events({
     'change #Hunter' : function(event){
         var number = $(event.target).val();
         if(!isNaN(number) && number){
-            HunterNum = number; 
+            roleArray['Hunter'] = number; 
             roleCount();
             console.log(number + 'how many left '+ totalCount);
         }
@@ -373,7 +371,7 @@ Template.createGame.events({
     'change #Granny' : function(event){
         var number = $(event.target).val();
         if(!isNaN(number) && number){
-            GrannyNum = number; 
+            roleArray['Granny'] = number; 
             roleCount();
             console.log(number + 'how many left '+ totalCount);
         }
@@ -381,7 +379,7 @@ Template.createGame.events({
     'change #Villager' : function(event){
         var number = $(event.target).val();
         if(!isNaN(number) && number){
-            VillagerNum = number; 
+            roleArray['Villager'] = number; 
             roleCount();
             console.log(number + 'how many left '+ totalCount);
         }
@@ -389,7 +387,7 @@ Template.createGame.events({
     'change #Witch' : function(event){
         var number = $(event.target).val();
         if(!isNaN(number) && number){
-            WitchNum = number; 
+            roleArray['Witch'] = number; 
             roleCount();
             console.log(number + 'how many left '+ totalCount);
         }
@@ -397,7 +395,7 @@ Template.createGame.events({
     'change #Seer' : function(event){
         var number = $(event.target).val();
         if(!isNaN(number) && number){
-            SeerNum = number; 
+            roleArray['Seer'] = number; 
             roleCount();
             console.log(number + 'how many left '+ totalCount);
         }
@@ -405,7 +403,7 @@ Template.createGame.events({
     'change #Cupid' : function(event){
         var number = $(event.target).val();
         if(!isNaN(number) && number){
-            CupidNum = number; 
+            roleArray['Cupid'] = number; 
             roleCount();
             console.log(number + 'how many left '+ totalCount);
         }
@@ -437,17 +435,17 @@ Template.createGame.rendered = function (event) {
   $("#player-name").focus();
   $("#lobbyInt").val(lobbySize);
   
-  $("#WereWolf").val(wereWolfNum);
-  $("#Doxy").val(doxyNum);
-  $("#Werehampster").val(werehampsterNum);
-  $("#Dark_Magician").val(darkMagicianNum);
-  $("#Granny").val(GrannyNum);
-  $("#Hunter").val(HunterNum);
-  $("#Cupid").val(CupidNum);
-  $("#Seer").val(SeerNum);
-  $("#Witch").val(WitchNum);
-  $("#Villager").val(VillagerNum);      
-  $("#Masonic_Leader").val(masonicLeaderNum);
+  $("#WereWolf").val(0);
+  $("#Doxy").val(0);
+  $("#Werehampster").val(0);
+  $("#Dark_Magician").val(0);
+  $("#Granny").val(0);
+  $("#Hunter").val(0);
+  $("#Cupid").val(0);
+  $("#Seer").val(0);
+  $("#Witch").val(0);
+  $("#Villager").val(0);      
+  $("#Masonic_Leader").val(0);
 };
 
 Template.joinGame.events({
