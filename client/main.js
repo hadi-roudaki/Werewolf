@@ -13,8 +13,18 @@ var roleArray = {
         'Witch' : 0,
         'Seer' : 0,
         'Cupid' : 0
- };
+};
+var tempArray = {};
 
+function popuplateCustomGame() {
+    var totalCount = 0;
+    for (var item in roleArray) {
+        if (parseInt(roleArray[item]) >= 1 ){
+            $.extend(tempArray, item);
+        }
+    }
+    console.log(tempArray);
+}
 
 function roleCount(){
     var totalCount = 0;
@@ -170,8 +180,8 @@ function generateNewPlayer(game, name){
 }
 
 function getRandomLocation(){
-  var locationIndex = Math.floor(Math.random() * locations.length);
-  return locations[locationIndex];
+    var locationIndex = Math.floor(Math.random() * totalCount);
+    return locations[locationIndex];
 }
 
 function shuffleArray(array) {
@@ -203,7 +213,8 @@ function assignRoles(players, location){
   });
 }
 
-function resetUserState(){
+function resetUserState() {
+  popuplateCustomGame();
   var player = getCurrentPlayer();
 
   if (player){
