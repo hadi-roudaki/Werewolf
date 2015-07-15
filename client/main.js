@@ -16,7 +16,15 @@ var roleArray = {
 };
 var tempArray = [];
 
+function mapRole(role) {
+    var result = characters.filter(function (e) {
+        return e.name == role
+    });
+    return result;
+}
+
 function popuplateCustomGame() {
+    tempArray = [];
     var totalCount = 0;
     for (var item in roleArray) {
         if (parseInt(roleArray[item]) >= 1)
@@ -32,8 +40,6 @@ function popuplateCustomGame() {
 function roleCount(){
     var totalCount = 0;
     for (var item in roleArray) {
-        console.log('im adding  ' + item, ' >>>', roleArray[item]);
-
         totalCount += parseInt(roleArray[item], 10);
     }
     console.log('current total '+totalCount);
@@ -173,7 +179,6 @@ function generateNewPlayer(game, name){
     gameID: game._id,
     name: name,
     role: null,
-    isSpy: false,
     isFirstPlayer: false
   };
 
@@ -199,15 +204,16 @@ function shuffleArray(array) {
     return array;
 }
 
-function assignRoles(players, location){
-  var default_role = location[0];
-  var shuffled_roles = shuffleArray(location);
-  var role = null;
+function assignRoles(players, roleArray){
+    var default_role = roleArray[0];
+    var shuffled_roles = shuffleArray(roleArray);
+    var role = null;
 
   players.forEach(function (player) {
-      var roleIndex = Math.floor(Math.random() * tempArray.length);      
-      role = tempArray[roleIndex];
-      tempArray.pop(roleIndex);
+      var roleIndex = Math.floor(Math.random() * shuffled_roles.length);
+      role = shuffled_roles[roleIndex];
+      shuffled_roles.splice(roleIndex, 1);
+      console.log(role, " my role ", shuffled_roles);
       Players.update(player._id, {$set: {role: role}});
   });
 }
@@ -533,12 +539,10 @@ Template.lobby.events({
     var localEndTime = moment().add(game.lengthInMinutes, 'minutes');
     var gameEndTime = TimeSync.serverTime(localEndTime);
 
-    var spyIndex = Math.floor(Math.random() * players.count());
     var firstPlayerIndex = Math.floor(Math.random() * players.count());
 
     players.forEach(function(player, index){
       Players.update(player._id, {$set: {
-        isSpy: index === spyIndex,
         isFirstPlayer: index === firstPlayerIndex
       }});
     });
@@ -586,6 +590,13 @@ function getTimeRemaining(){
   return timeRemaining;
 }
 
+Template.gameView.rendered = function (event) {
+    var dec = getCurrentPlayer();
+    var char = mapRole(dec.role);
+    $("#roleDes").text(char[0].desc);
+};
+
+
 Template.gameView.helpers({
   game: getCurrentGame,
   player: getCurrentPlayer,
@@ -602,8 +613,8 @@ Template.gameView.helpers({
 
     return players;
   },
-  locations: function () {
-    return locations;
+  characters: function () {
+      return characters;
   },
   gameFinished: function () {
     var timeRemaining = getTimeRemaining();
