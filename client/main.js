@@ -14,13 +14,16 @@ var roleArray = {
         'Seer' : 0,
         'Cupid' : 0
 };
-var tempArray = {};
+var tempArray = [];
 
 function popuplateCustomGame() {
     var totalCount = 0;
     for (var item in roleArray) {
-        if (parseInt(roleArray[item]) >= 1 ){
-            $.extend(tempArray, item);
+        if (parseInt(roleArray[item]) >= 1)
+        {            for (i = 0; i < parseInt(roleArray[item]) ; i++)
+            {
+            tempArray.push(item);
+            }
         }
     }
     console.log(tempArray);
@@ -180,8 +183,10 @@ function generateNewPlayer(game, name){
 }
 
 function getRandomLocation(){
-    var locationIndex = Math.floor(Math.random() * totalCount);
-    return locations[locationIndex];
+    //var roleIndex = Math.floor(Math.random() * tempArray.length);
+    //var playerRole = tempArray.indexOf(roleIndex);
+    //tempArray.pop(roleIndex);
+    return tempArray;
 }
 
 function shuffleArray(array) {
@@ -195,26 +200,19 @@ function shuffleArray(array) {
 }
 
 function assignRoles(players, location){
-  var default_role = location.roles[location.roles.length - 1];
-  var roles = location.roles.slice();
-  var shuffled_roles = shuffleArray(roles);
+  var default_role = location[0];
+  var shuffled_roles = shuffleArray(location);
   var role = null;
 
-  players.forEach(function(player){
-    if (!player.isSpy){
-      role = shuffled_roles.pop();
-
-      if (role === undefined){
-        role = default_role;
-      }
-
+  players.forEach(function (player) {
+      var roleIndex = Math.floor(Math.random() * tempArray.length);      
+      role = tempArray[roleIndex];
+      tempArray.pop(roleIndex);
       Players.update(player._id, {$set: {role: role}});
-    }
   });
 }
 
 function resetUserState() {
-  popuplateCustomGame();
   var player = getCurrentPlayer();
 
   if (player){
@@ -421,7 +419,7 @@ Template.createGame.events({
     },      
     'submit #create-game': function (event) {
         GAnalytics.event("game-actions", "newgame");
-
+        popuplateCustomGame();
     var playerName = event.target.playerName.value;
 
     if (!playerName) {

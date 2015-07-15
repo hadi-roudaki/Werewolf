@@ -1,4 +1,4 @@
-<head>
+﻿<head>
   <meta charset="utf-8">
   <title>Werewolf | Roudaki</title>
 
@@ -101,9 +101,6 @@
     <button class="btn-toggle-status">{{_ "ui.show hide" }}</button>
 
     <div class="status-container-content">
-      {{#if player.isSpy }}
-        <div class="player-status player-status-spy">{{_ "you are the WereWolf" }}</div>
-      {{else}}
         <div class="current-role">
           <div class="current-role-header">
             {{_ "ui.your role" }}:
@@ -112,7 +109,6 @@
             {{_ player.role }}
           </div>
         </div>
-      {{/if}}
     </div>
   </div>
 
