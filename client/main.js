@@ -594,6 +594,9 @@ Template.gameView.rendered = function (event) {
     var dec = getCurrentPlayer();
     var char = mapRole(dec.role);
     $("#roleDes").text(char[0].desc);
+    $("#roleAct").text(char[0].action);
+    $("#roleDay").text(char[0].day);
+    $("#roleNight").text(char[0].night);
 };
 
 
