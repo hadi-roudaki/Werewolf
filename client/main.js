@@ -179,7 +179,8 @@ function generateNewPlayer(game, name){
     gameID: game._id,
     name: name,
     role: null,
-    isFirstPlayer: false
+    isFirstPlayer: false,
+    dead : false
   };
 
   var playerID = Players.insert(player);
@@ -544,6 +545,7 @@ Template.lobby.events({
     players.forEach(function(player, index){
       Players.update(player._id, {$set: {
         isFirstPlayer: index === firstPlayerIndex
+
       }});
     });
 
